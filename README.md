@@ -1,4 +1,12 @@
 # My personal nix/nixos/home-manager config
+
+This config uses:
+- den
+- flake-file
+- flake-parts
+- home-manager
+- import-tree
+
 Refer to the [den documentation](https://vic.github.io/den)
 
 For now the structure is:
