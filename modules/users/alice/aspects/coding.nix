@@ -10,9 +10,14 @@
 #			environment.systemPackages = [inputs.alejandra.defaultPackage.${system}];
 #		};
 		homeManager = {
-			programs.vscode = {
-  	    enable = true;
-      };
+			programs = {
+				vscode = {
+  	    	enable = true;
+      	};
+				git = {
+					enable = true;
+				};
+			};
 		};
 	};
 }
