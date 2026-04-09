@@ -17,6 +17,9 @@
         in pkgs.mkShell {
           nativeBuildInputs = [
             dotnetSdk
+            
+            # Extra packages for whichever frameworks are used
+            pkgs.avalonia
           ];
           DOTNET_BIN = "${dotnetSdk}/bin/dotnet";
         };

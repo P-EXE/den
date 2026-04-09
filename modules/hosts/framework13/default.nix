@@ -23,19 +23,20 @@
 
     # host NixOS configuration
     nixos = { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.hello ];
       
-      imports = [
-        ../../../nixos/framework13/configuration.nix
-      ];
-      
-      programs.hyprland = {
+/*       programs.hyprland = {
         enable = true;
         package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
         portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
         withUWSM = true;
         xwayland.enable = true;
-      };
+      }; */
+      
+      environment.systemPackages = [ pkgs.hello ];
+      
+      imports = [
+        ../../../nixos/framework13/configuration.nix
+      ];
       
       nixpkgs.config.allowUnfree = true;
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
