@@ -1,4 +1,4 @@
-{ den, ... }: {
+{ den, inputs, ... }: {
   #den.ctx.user.includes = [ den._.mutual-provider ];
   den.aspects.alice = {
     includes = [
@@ -7,47 +7,48 @@
       (den.provides.user-shell "fish")
       den.aspects.alice._.coding
       den.aspects.alice._.gaming
-      den.aspects.alice._.desktop._.hyprland
+      den.aspects.alice._.desktop._.gnome
+      den.aspects.alice._.terminal._.kitty
     ];
     homeManager = { pkgs, ... }: {
       home.packages = with pkgs; [ 
       	htop
         vesktop
       ];
-      
       programs.firefox = {
         enable = true;
       };
     };
-    provides.to-hosts.nixos = { pkgs, ... }: { };
-    _.desktop = {
-      _.hyprland = {inputs, ...}: {
-        flake-file.inputs = {
-          hyprland = {
-            url = "github:hyprwm/Hyprland";
-          };
-          hyprland-plugins = {
-            url = "github:hyprwm/hyprland-plugins";
-            inputs.hyprland.follows = "hyprland";
-          };
+    provides.to-hosts.nixos = { pkgs, ... }: { 
+    };
+    _.desktop._.hyprland = {
+      flake-file = {
+        inputs.hyprland.url = "github:hyprwm/Hyprland";
+      };
+      nixos = {pkgs, ...}: {
+        programs.hyprland = {
+          enable = true;
+          package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+          portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+          withUWSM = true;
+          xwayland.enable = true;
         };
-        homeManager = { pkgs, ...}: {
-          wayland.windowManager.hyprland = {
-            enable = true;
-            package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-            portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-            systemd.enable = false;
-            plugins = with inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
-              #hyprexpo
-              #hyprbars
-            ];
-          };
-          wayland.windowManager.hyprland.settings = {
+        nix.settings = {
+          substituters = ["https://hyprland.cachix.org"];
+          trusted-substituters = ["https://hyprland.cachix.org"];
+          trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+        };
+      };
+      homeManager = {
+        wayland.windowManager.hyprland = {
+          enable = true;
+          package = null;
+          portalPackage = null;
+          settings = {
             # Keybinds
             "$mod" = "Super";
             "$mod_l" = "Super_L";
             input = {
-              #kb_layout = "de, " + keyboardLayouts; requires a hwInfo system
               kb_layout = "us";
               kb_options = "grp:alt_space_toggle";
               repeat_rate = 25;
@@ -128,16 +129,35 @@
               #workspace_swipe_create_new = true;
               #workspace_swipe_forever = true;
             ];
-            #monitor = monitors; requires a hwInfo system
-            monitor  = [ ", preferred, auto, 1" ];
-            exec-once = [
-              "systemctl --user start hyprpolkitagent"
-              "udiskie"
-              "waybar"
-              "systemctl --user enable --now hyprpaper.service"
-              #"awww-daemon"
-            ];
+            # Theme
+            general = {
+              layout = "dwindle";
+              border_size = 0;
+              gaps_in = 0;
+              gaps_out = 0;
+            };
           };
+        };
+      };
+    };
+    _.desktop._.gnome = {
+      nixos = {
+        services.xserver.enable = true;
+        services.displayManager.gdm.enable = true;
+        services.desktopManager.gnome.enable = true;
+      };
+    };
+    _.desktop._.plasma = {
+      nixos = {
+        services.xserver.enable = true;
+        services.displayManager.sddm.enable = true;
+        services.desktopManager.plasma6.enable = true;
+      };
+    };
+    _.terminal = {
+      _.kitty = {
+        homeManager = {
+          programs.kitty.enable = true;
         };
       };
     };
