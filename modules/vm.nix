@@ -5,7 +5,7 @@
 {
 
   # USER TODO: remove this tty-autologin used for the VM
-  den.aspects.framework13.includes = [ (den.provides.tty-autologin "alice") ];
+  den.aspects.igloo.includes = [ (den.provides.tty-autologin "tux") ];
 
   perSystem =
     { pkgs, ... }:
@@ -14,7 +14,7 @@
         name = "vm";
         text =
           let
-            host = inputs.self.nixosConfigurations.framework13.config;
+            host = inputs.self.nixosConfigurations.igloo.config;
           in
           ''
             ${host.system.build.vm}/bin/run-${host.networking.hostName}-vm "$@"
