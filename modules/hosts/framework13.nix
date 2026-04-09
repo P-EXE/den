@@ -2,10 +2,15 @@
   # host aspect
   den.aspects.framework13 = {
     # host NixOS configuration
-    nixos = { pkgs, ... }: {
+    nixos = { lib, config, pkgs, modulesPath,  ... }: {
       imports =[
         (modulesPath + "/installer/scan/not-detected.nix")
       ];
+
+      # Desktops (TODO: remove and aspectrize)
+        services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome.enable = true;
 
       environment.systemPackages = [ pkgs.hello ];
 

@@ -1,7 +1,7 @@
-{ lib, den, ... }:
-{
+{ lib, den, ... }: {
   den.default.nixos = {
     nixpkgs.config.allowUnfree = true;
+    nix.settings.experimental-features = [ "nix-command" "flakes" ];
     system.stateVersion = "25.11";
   };
   den.default.homeManager = {

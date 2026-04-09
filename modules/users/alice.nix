@@ -19,9 +19,29 @@
     provides.to-hosts.nixos = { pkgs, ... }: { };
     # Aspects
     _.desktops._.hyprland = {
+      flake-file = {
+        inputs.hyprland.url = "github:hyprwm/Hyprland";
+      };
+      nixos = {inputs, pkgs, ...}: {
+        programs.hyprland = {
+          enable = true;
+          # set the flake package
+          package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+          # make sure to also set the portal package, so that they are in sync
+          portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+        };
+        nix.settings = {
+          substituters = ["https://hyprland.cachix.org"];
+          trusted-substituters = ["https://hyprland.cachix.org"];
+          trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+        };
+      };
       homeManager = {
         wayland.windowManager.hyprland = {
           enable = true;
+          # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
+          package = null;
+          portalPackage = null;
         };
       };
     };
