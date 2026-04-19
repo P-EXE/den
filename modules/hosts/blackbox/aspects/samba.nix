@@ -19,8 +19,8 @@
           "map to guest" = "bad user";
         };
         "public" = {
-          #"path" = "/mnt/storage/shares/public";
-          "path" = "/mnt/potentially_broken_drive/shares/public";
+          "path" = "/mnt/storage/shares/public";
+          #"path" = "/mnt/potentially_broken_drive/shares/public";
           "browseable" = "yes";
           "read only" = "no";
           "public" = "yes";
@@ -29,8 +29,8 @@
           "vfs objects" = "catia fruit streams_xattr";
         };
         "internal" = {
-          #"path" = "/mnt/storage/shares/internal";
-          "path" = "/mnt/potentially_broken_drive/shares/internal";
+          "path" = "/mnt/storage/shares/internal";
+          #"path" = "/mnt/potentially_broken_drive/shares/internal";
           "browseable" = "yes";
           "read only" = "yes";
           "public" = "yes";
@@ -41,8 +41,8 @@
           "vfs objects" = "catia fruit streams_xattr";
         };
         "timemachine" = {
-          #"path" = "/mnt/storage/shares/timemachine/alice";
-          "path" = "/mnt/potentially_broken_drive/shares/timemachine/alice";
+          "path" = "/mnt/storage/shares/timemachine/alice";
+          #"path" = "/mnt/potentially_broken_drive/shares/timemachine/alice";
           "browseable" = "no";
           "read only" = "no";
           "public" = "no";
@@ -51,26 +51,26 @@
           "vfs objects" = "catia fruit streams_xattr";
         };
         "alice" = {
-          #"path" = "/mnt/storage/shares/alice";
-          "path" = "/mnt/potentially_broken_drive/shares/alice";
+          "path" = "/mnt/storage/shares/alice";
+          #"path" = "/mnt/potentially_broken_drive/shares/alice";
           "browseable" = "no";
           "read only" = "yes";
           "public" = "no";
           "create mask" = "0755";
           "directory mask" = "0755";
-                "valid users" = "alice";
+          "valid users" = "alice";
           "write list" = "alice";
           "vfs objects" = "catia fruit streams_xattr";
         };
         "ingrid" = {
-          #"path" = "/mnt/storage/shares/ingrid";
-          "path" = "/mnt/potentially_broken_drive/shares/ingrid";
+          "path" = "/mnt/storage/shares/ingrid";
+          #"path" = "/mnt/potentially_broken_drive/shares/ingrid";
           "browseable" = "no";
           "read only" = "yes";
           "public" = "no";
           "create mask" = "0755";
           "directory mask" = "0755";
-                "valid users" = "ingrid";
+          "valid users" = "ingrid";
           "write list" = "ingrid";
           "vfs objects" = "catia fruit streams_xattr";
         };
