@@ -18,7 +18,9 @@
     };
     # user can provide NixOS configurations
     # to any host it is included on
-    provides.to-hosts.nixos = { pkgs, ... }: { };
+    provides.to-hosts.nixos = { pkgs, ... }: { 
+
+    };
     # Aspects
     _.apps = {
       includes = lib.attrValues den.aspects.alice._.apps._;
@@ -41,6 +43,9 @@
         homeManager = {
           programs.vscode.enable = true;
         };
+        _.to-hosts.nixos = {
+          services.vscode-server.enable = true;
+        }
       };
       _.tools = {
         homeManager = {
