@@ -5,6 +5,10 @@
   den.hosts.x86_64-linux.framework13.users = {
     alice = { };
   };
+  den.hosts.x86_64-linux.blackbox.users = {
+    alice = { };
+    ingrid = { };
+  };
 
   # Darwin Hosts
   den.hosts.x86_64-darwin.macbookpro.users = {
