@@ -1,6 +1,10 @@
-{
+{ den, ... }: {
   # host aspect
   den.aspects.framework13 = {
+    includes = with den.aspects; [
+      virtualization
+    ];
+
     # host NixOS configuration
     nixos = { lib, config, pkgs, modulesPath,  ... }: {
       imports =[
