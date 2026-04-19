@@ -1,7 +1,9 @@
 { den, lib, ... }: {
   # host aspect
   den.aspects.blackbox = {
-    includes = lib.attrValues den.aspects.blackbox._;
+    includes = with den.aspects; [
+      plex
+    ] + lib.attrValues den.aspects.blackbox._;
     nixos = { lib, config, pkgs, modulesPath,  ... }: {
       imports =[
         (modulesPath + "/installer/scan/not-detected.nix")
