@@ -40,7 +40,7 @@
           "write list" = "@sambagroup";
           "vfs objects" = "catia fruit streams_xattr";
         };
-        "timemachine" = {
+        "timemachine-alice" = {
           "path" = "/mnt/storage/shares/timemachine/alice";
           #"path" = "/mnt/potentially_broken_drive/shares/timemachine/alice";
           "browseable" = "no";

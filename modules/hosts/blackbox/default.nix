@@ -1,4 +1,4 @@
-{ den, ... }: {
+{ den, lib, ... }: {
   # host aspect
   den.aspects.blackbox = {
     includes = lib.attrValues den.aspects.blackbox._;
