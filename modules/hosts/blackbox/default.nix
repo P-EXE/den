@@ -5,7 +5,7 @@
       desktop
       plex
       graphics
-    ] + lib.attrValues den.aspects.blackbox._;
+    ] ++ lib.attrValues den.aspects.blackbox._;
     nixos = { lib, config, pkgs, modulesPath,  ... }: {
       imports =[
         (modulesPath + "/installer/scan/not-detected.nix")
