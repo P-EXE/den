@@ -13,7 +13,7 @@
     ];
     homeManager = { pkgs, ... }: {
       home.packages = with pkgs; [ 
-        pkgs.htop
+        htop
       ];
     };
     # user can provide NixOS configurations
