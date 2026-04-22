@@ -37,22 +37,6 @@
         };
       };
     };
-    _.coding = {
-      includes = lib.attrValues den.aspects.alice._.coding._;
-      _.editors = {
-        homeManager = {
-          programs.vscode.enable = true;
-        };
-        _.to-hosts.nixos = {
-          services.vscode-server.enable = true;
-        };
-      };
-      _.tools = {
-        homeManager = {
-          programs.git.enable = true;
-        };
-      };
-    };
     _.themes._.archive = {
       homeManager = { pkgs,  ... }: {
         home.packages = with pkgs; [
