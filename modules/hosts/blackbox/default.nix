@@ -7,7 +7,7 @@
       graphics
     ] ++ lib.attrValues den.aspects.blackbox._;
     nixos = { lib, config, pkgs, modulesPath,  ... }: {
-      imports =[
+      imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
       ];
 

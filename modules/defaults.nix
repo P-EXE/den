@@ -6,9 +6,15 @@
       experimental-features = [ "nix-command" "flakes" ];
     };
     system.stateVersion = "25.11";
+
+    programs.nix-ld.enable = true;
   };
   den.default.homeManager = {
     nixpkgs.config.allowUnfree = true;
+    nix.settings = {
+      trusted-users = [ "@wheel" ];
+      experimental-features = [ "nix-command" "flakes" ];
+    };
     home.stateVersion = "25.11";
   };
 
