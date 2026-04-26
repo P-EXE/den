@@ -11,10 +11,10 @@
   };
   den.default.homeManager = {
     nixpkgs.config.allowUnfree = true;
-    nix.settings = {
-      trusted-users = [ "@wheel" ];
-      experimental-features = [ "nix-command" "flakes" ];
-    };
+    #nix.settings = {
+    #  trusted-users = [ "@wheel" ];
+    #  experimental-features = [ "nix-command" "flakes" ];
+    #};
     home.stateVersion = "25.11";
   };
 

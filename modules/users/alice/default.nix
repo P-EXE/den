@@ -22,21 +22,6 @@
 
     };
     # Aspects
-    _.apps = {
-      includes = lib.attrValues den.aspects.alice._.apps._;
-      _.browsers = {
-        homeManager = {
-          programs.firefox.enable = true;
-        };
-      };
-      _.media = {
-        homeManager = {pkgs, ...}: {
-          home.packages = with pkgs; [
-            spotify
-          ];
-        };
-      };
-    };
     _.themes._.archive = {
       homeManager = { pkgs,  ... }: {
         home.packages = with pkgs; [
