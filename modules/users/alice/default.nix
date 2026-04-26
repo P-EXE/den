@@ -6,8 +6,8 @@
       den.provides.primary-user
       (den.provides.user-shell "fish")
       #den.aspects.alice._.themes._.archive
-      den.aspects.alice._.desktops._.hyprland
-      den.aspects.alice._.desktops._.niri
+      #den.aspects.alice._.desktops._.hyprland
+      #den.aspects.alice._.desktops._.niri
       den.aspects.alice._.apps
       den.aspects.alice._.coding
     ];
