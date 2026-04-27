@@ -3,6 +3,7 @@
   den.aspects.blackbox = {
     includes = with den.aspects; [
       desktop._.gnome
+      virtualization
       plex
       graphics
     ] ++ lib.attrValues den.aspects.blackbox._;
