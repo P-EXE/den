@@ -1,5 +1,9 @@
-{ den, pkgs, ... }: {
-  den.aspects.graphics.nixos.environment.systemPackages = with pkgs; [
-    blender
-  ];
+{ den, ... }: {
+  den.aspects.graphics = {
+    nixos = { pkgs, ... } : {
+      environment.systemPackages = with pkgs; [
+        blender
+      ];
+    };
+  };
 }
