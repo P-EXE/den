@@ -2,7 +2,7 @@
   # host aspect
   den.aspects.blackbox = {
     includes = with den.aspects; [
-      desktop
+      desktop._.plasma
       plex
       graphics
     ] ++ lib.attrValues den.aspects.blackbox._;
