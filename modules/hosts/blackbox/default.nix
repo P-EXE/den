@@ -5,7 +5,7 @@
       desktop._.gnome
       virtualization
       plex
-      graphics
+      blender
     ] ++ lib.attrValues den.aspects.blackbox._;
     nixos = { lib, config, pkgs, modulesPath,  ... }: {
       imports = [

@@ -1,24 +1,19 @@
 { den, inputs, lib, ... }: {
   den.aspects.alice._.apps = {
-    includes = lib.attrValues den.aspects.alice._.apps._;
-    _.browser = {
-      homeManager = { pkgs, ... }: {
-        programs.firefox.enable = true;
-      };
-    };
-    _.notes = {
-      homeManager = { pkgs, ... }: {
-        home.packages = with pkgs; [
-          obsidian
-        ];
-      };
-    };
-    _.media = {
-      homeManager = {pkgs, ...}: {
-        home.packages = with pkgs; [
-          spotify
-        ];
-      };
+    #includes = lib.attrValues den.aspects.alice._.apps._;
+    homeManager = {pkgs, ...}: {
+      programs.firefox.enable = true;
+      home.packages = with pkgs; [
+        htop
+        btop
+        bottom
+        cbonsai
+        fastfetch
+
+        spotify
+        obsidian
+        steam
+      ];
     };
   };
 }
