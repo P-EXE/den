@@ -13,5 +13,10 @@
         inputs.blender-cuda.packages.${pkgs.system}.blender-with-cuda
       ];
     };
+    homeManager = { pkgs, ... }: {
+      home.packages = [
+        inputs.blender-cuda.packages.${pkgs.system}.blender-with-cuda
+      ];
+    };
   };
 }

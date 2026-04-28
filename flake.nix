@@ -11,6 +11,7 @@
   };
 
   inputs = {
+    blender-cuda.url = "github:adithyagenie/blender-cuda-nixos";
     den.url = "github:vic/den";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
