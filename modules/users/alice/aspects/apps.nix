@@ -10,6 +10,8 @@
         cbonsai
         fastfetch
 
+        qbittorrent
+
         spotify
         obsidian
         steam
