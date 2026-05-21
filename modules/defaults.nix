@@ -5,7 +5,6 @@
       trusted-users = [ "@wheel" ];
       experimental-features = [ "nix-command" "flakes" ];
     };
-    system.stateVersion = "25.11";
 
     programs.nix-ld.enable = true;
   };
@@ -15,14 +14,14 @@
     #  trusted-users = [ "@wheel" ];
     #  experimental-features = [ "nix-command" "flakes" ];
     #};
-    home.stateVersion = "25.11";
+    home.stateVersion = "26.05";
   };
 
   # enable hm by default
   den.schema.user.classes = lib.mkDefault [ "homeManager" ];
 
   # host<->user provides
-  den.ctx.user.includes = [ den._.mutual-provider ];
+  den.schema.user.includes = [ den._.mutual-provider ];
 
   # User TODO: REMOVE THIS
   den.aspects.tux.nixos = {

@@ -58,6 +58,8 @@
           boot.initrd.kernelModules = [ ];
           boot.kernelModules = [ "kvm-amd" ];
           boot.extraModulePackages = [ ];
+        # Nixos
+          system.stateVersion = "26.05";
 
       # Hardware
         # Audio
