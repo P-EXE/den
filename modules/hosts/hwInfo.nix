@@ -1,5 +1,4 @@
-{ lib, config, ... }: let 
-cfg = config.hwInfo;
+{ lib, den, ... }: let
 display = lib.types.submodule ({ ... }: with lib; {
   options = {
     name = mkOption {
@@ -97,26 +96,28 @@ keyboard = lib.types.submodule ({...}: with lib; {
   };
 });
 in {
-  options.hwInfo = with lib; {    
-    deviceType = mkOption {
-      type = types.enum [ "laptop" "desktop" "server" ];
-      default = "desktop";
-      description = "Type of device";
-    };
+  den.schema.host = {
+    options.hwInfo = with lib; {    
+      deviceType = mkOption {
+        type = types.enum [ "laptop" "desktop" "server" ];
+        default = "desktop";
+        description = "Type of device";
+      };
 
-    displays = mkOption {
-      type = types.listOf display;
-      default = [];
-    };
+      displays = mkOption {
+        type = types.listOf display;
+        default = [];
+      };
 
-    keyboards = mkOption {
-      type = types.listOf keyboard;
-      default = [];
-    };
+      keyboards = mkOption {
+        type = types.listOf keyboard;
+        default = [];
+      };
 
-    primaryDisplay = mkOption {
-      type = display;
-      default = lib.head cfg.displays;
+      primaryDisplay = mkOption {
+        type = display;
+        default = lib.head cfg.displays;
+      };
     };
   };
 }
