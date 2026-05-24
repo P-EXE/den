@@ -128,12 +128,326 @@
             #workspace_swipe_create_new = true;
             #workspace_swipe_forever = true;
           ];
+
+          # Startup
+          exec-once = [
+            "systemctl --user start hyprpolkitagent"
+            "udiskie"
+            "waybar"
+            "systemctl --user enable --now hyprpaper.service"
+            #"awww-daemon"
+          ];
+
+          # Workspaces
+          workspace = [
+            "1, default:true"
+            "2"
+            "3"
+            "4"
+            "5"
+            "6"
+            "7"
+            "8"
+            "9"
+            "10"
+          ];
+
+          # Theme
+          general = {
+            layout = "dwindle";
+            border_size = 0;
+            gaps_in = 0;
+            gaps_out = 0;
+          };
+          decoration = {
+            rounding = 0;
+            active_opacity = 1;
+            inactive_opacity = 1;
+            dim_inactive = true;
+            dim_strength = 0.6;
+            blur = {
+              enabled = false;
+              size = 128;
+              passes = 3;
+              noise = 0.1;
+              contrast = 1.0;
+              brightness = 1.0;
+              vibrancy = 1.0;
+              vibrancy_darkness = 1.0;
+              popups = true;
+              popups_ignorealpha = 0.2;
+              input_methods = true;
+              input_methods_ignorealpha = 0.2;
+              new_optimizations = true;
+            };
+            shadow = {
+              enabled = false;
+              range = 16;
+              render_power = 3;
+              sharp = false;
+              ignore_window = true;
+              color = "0xff252525";
+              color_inactive = "0xff1b1b1b";
+              scale = 1.0;
+            };
+          };
+          windowrule = [
+            "no_dim on, match:class firefox"
+            "no_dim on, match:class vesktop"
+            "move 100%-w-16, opacity 0.9, match:initial_title = Hyprland Polkit Agent"
+          ];
+          layerrule = [
+          ];
+          animations = {
+            enabled = true;
+          };
+          animation = [
+            "fade, 1, 0.1, default"
+            "workspaces, 1, 1, default, slide"
+            "layersIn, 1, 1, default, slide"
+            "layersOut, 1, 1, default, slide"
+            "windows, 1, 1, default, slide"
+          ];
+          env = [
+            "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
+          ];
+          "plugin:hyprbars" = {
+            enabled = true;
+            bar_height = 18;
+            bar_title_enabled = true;
+            bar_text_size = 8;
+            bar_text_font = "JetBrains Mono";
+            bar_text_align = "left";
+            bar_padding = 4;
+            bar_color = "rgb(0, 0, 0)";
+          };
+          #"plugin:hyprexpo" = {
+          #  columns = 3;
+          #  gap_size = 0;
+          #  bg_col = "0x000000";
+          #  workspace_method = "center current";
+          #};
         };
+      };
+
+      programs.kitty = {
+        enable = true;
+        settings = {
+          font_size = 9;
+          confirm_os_window_close = 0;
+
+          # Theme
+          font_family = "JetBrains Mono";
+          cursor_shape = "beam";
+          cursor_shape_unfocused = "unchanged";
+          window_padding_width = 0;
+          background = "#000000";
+          foreground = "#E6E6E6";
+          cursor = "#ffffff";
+          selection_background = "#E6E6E6";
+          selection_foreground = "#000000";
+          color0 = "";
+          color1 = "#FF6188";
+          color2 = "#A9DC76";
+          color3 = "#FFD866";
+          color4 = "#2386D1";
+          color5 = "#AB9DF2";
+          color6 = "#78DCE8";
+          color7 = "";
+          color8 = "";
+          color9 = "#CC768C";
+          color10 = "#92A87D";
+          color11 = "#CCB87A";
+          color12 = "#3A739E";
+          color13 = "#A7A3BF";
+          color14 = "#82B0B5";
+          color15 = "";
+        };
+      };
+
+      programs.waybar = {
+        enable = true;
+        settings = {
+          mainBar = {
+            layer = "bottom";
+            position = "top";
+            modules-left = [ "hyprland/workspaces" "wlr/taskbar" ];
+            modules-center = [ "custom/waybar-mpris" ];
+            modules-right = [ "tray" "hyprland/language" "network" "cpu" "memory" "wireplumber" "battery" "clock" ];
+            #output = [];
+            "hyprland/workspaces" = {};
+            "wlr/taskbar" = {
+              format = "{icon}";
+              icon-size = 10;
+              tooltip-format = "{title}";
+              on-click = "activate";
+              on-click-middle = "close";
+              rotate = 0;
+            };
+            "tray" = {
+              icon-size = 10;
+              spacing = 8;
+              rotate = 0;
+            };
+            "hyprland/language" = {
+              format = "{}";
+              format-de = "DE";
+              format-en = "US";
+              rotate = 0;
+            };
+            "network" = {
+              format-ethernet = "ETH: {ipaddr}/{cidr}";
+              format-wifi = "WLAN: {essid}-↑{bandwidthUpBits}↓{bandwidthDownBits}";
+              format-disconnected = "";
+              format-icons = ["░" "▂" "▄" "▆" "█"];
+              tooltip-format = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}";
+              tooltip-format-wifi = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}\nstr: {signalStrength}\nstr dB: {signaldBm}\nfreq: {frequency} GHz\nup: {bandwidthUpBits}\ndown: {bandwidthDownBits}";
+              rotate = 0;
+            };
+            "cpu" = {
+              format = "CPU: {usage}%";
+              rotate = 0;
+            };
+            "memory" = {
+              format = "RAM: {}%";
+              rotate = 0;
+            };
+            "wireplumber" = {
+              format = "Vol: {volume}%-{node_name}";
+              format-muted = "Mute";
+              on-click = "helvum";
+              format-icons = ["◂" "◄" "◀"];
+              rotate = 0;
+            };
+            "pulseaudio" = {
+              scroll-step = 1;
+              format = "Vol: {volume}%";
+              format-bluetooth = "{volume}% {icon} {format_source}";
+              format-bluetooth-muted = " {icon} {format_source}";
+              format-muted = " {format_source}";
+              format-source = "{volume}% ";
+              format-source-muted = " ";
+              format-icons = {
+                "headphone" = " ";
+                "hands-free" = " ";
+                "headset" = " ";
+                "phone" = " ";
+                "portable" = " ";
+                "car" = " ";
+                "default" = ["" " " " "];
+              };
+              on-click = "pavucontrol";
+              rotate = 0;
+            };
+            "battery" = {
+              "states" = {
+                "good" = 95;
+                "warning" = 30;
+                "critical" = 15;
+              };
+              format = "BAT: {capacity}%";
+              format-charging = "CRG-{capacity}%";
+              format-plugged = "PLG-{capacity}%";
+              format-alt = "{icon} {time}";
+              format-full = "";
+              format-icons = ["░" "▂" "▄" "▆" "█"];
+              rotate = 0;
+            };
+            "clock" = {
+              format = "{:L%A %d.%m.%Y(W%V) %H:%M:%S (%z)}";
+              rotate = 0;
+            };
+            "custom/waybar-mpris" = {
+              "return-type"= "json";
+              "exec" = "waybar-mpris --position --autofocus";
+              "on-click" = "waybar-mpris --send toggle";
+              # This option will switch between players on right click.
+              "on-click-right" = "waybar-mpris --send player-next";
+              # The options below will switch the selected player on scroll
+              # "on-scroll-up" = "waybar-mpris --send player-next";
+              # "on-scroll-down" = "waybar-mpris --send player-prev";
+              # The options below will go to next/previous track on scroll
+              #"on-scroll-up" = "waybar-mpris --send next";
+              #"on-scroll-down" = "waybar-mpris --send prev";
+              "escape" = true;
+              rotate = 0;
+            };
+          };
+        };
+        style = ''
+          * {
+            all: unset;
+            font-family: 'JetBrains Mono';
+          }
+
+          window#waybar>box {
+            background: #000000;
+            font-size: 10px;
+            padding: 0px;
+          }
+
+          tooltip {
+            background: transparent;
+            /* border: 1px solid rgba(100, 114, 125, 0.5); */
+          }
+          tooltip label {
+            background: #000000;
+            margin: 4px;
+          }
+
+          #workspaces {
+          }
+          #workspaces button {
+            padding: 0px;
+            color: rgba(255, 255, 255, 0.5);
+          }
+          #workspaces button.active {
+            color: #ffffff;
+          }
+          #taskbar {
+            padding: 0px;
+          }
+          #taskbar * {
+            padding: 1px;
+          }
+
+          #tray {
+            padding: 0px;
+          }
+          #language {
+            padding: 0px;
+          }
+          #network {
+            padding: 0px;
+            color: #ff6188;
+          }
+          #cpu {
+            padding: 0px;
+            color: #fc9867;
+          }
+          #memory {
+            padding: 0px;
+            color: #ffd866;
+          }
+          #wireplumber {
+            padding: 0px;
+            color: #a9dc76;
+          }
+          #battery {
+            padding: 0px;
+            color: #78dce8;
+          }
+          #clock {
+            padding: 0px;
+            color: #ab9df2;
+          }
+        '';
       };
 
       programs.tofi = {
         enable = true;
         settings = {
+          # Theme
           width = "100%";
           height = "100%";
           border-width = 0;
@@ -145,13 +459,42 @@
           font = "JetBrains Mono";
           font-variations = "wght 900";
           font-features = "ss08 on";
-          font-size = "${toString (96 * hwInfo.primaryDisplay.pseudoScale)}px";
+          font-size = "96px";
           text-color = "#FFFFFF33";
           background-color = "#000000FF";
           selection-color = "#FFFFFFE6";
           selection-match-color = "#FF4F00";
           selection-background-padding = "16px 0 16px 16px";
           prompt-text = "↘";
+        };
+      };
+
+      # Theme
+      home.pointerCursor = {
+        gtk.enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Original-Classic";
+        size = 4;
+      };
+      gtk = with pkgs; {
+        enable = true;
+        theme = {
+          package = adw-gtk3;
+          name = "adw-gtk3-dark";
+        };
+        iconTheme = {
+          package = papirus-icon-theme;
+          name = "Papirus-Dark";
+        };
+        gtk3.extraConfig = {
+          Settings = ''
+            gtk-application-prefer-dark-theme=1
+          '';
+        };
+        gtk4.extraConfig = {
+          Settings = ''
+            gtk-application-prefer-dark-theme=1
+          '';
         };
       };
     };
