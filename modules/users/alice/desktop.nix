@@ -65,7 +65,7 @@
             "$mod+Shift, Space, exec, pkill tofi-run || tofi-run | xargs hyprctl dispatch exec --"
             "$mod, K, exec, kitty"
             "$mod, E, exec, kitty yazi"
-            "$mod, Tab, hyprexpo:expo, toggle"
+            #"$mod, Tab, hyprexpo:expo, toggle"
             "Control_L&Shift_L, Escape, exec, kitty htop"
             "$mod, Print, exec, hyprshot -m region --clipboard-only"
             "$mod+Shift, Print, exec, hyprshot -m output --clipboard-only"
@@ -152,6 +152,9 @@
             "10"
           ];
 
+          # Hardware
+          monitor  = [ ", preferred, auto, 1" ];
+
           # Theme
           general = {
             layout = "dwindle";
@@ -185,7 +188,7 @@
               range = 16;
               render_power = 3;
               sharp = false;
-              ignore_window = true;
+              #ignore_window = true;
               color = "0xff252525";
               color_inactive = "0xff1b1b1b";
               scale = 1.0;
@@ -194,7 +197,7 @@
           windowrule = [
             "no_dim on, match:class firefox"
             "no_dim on, match:class vesktop"
-            "move 100%-w-16, opacity 0.9, match:initial_title = Hyprland Polkit Agent"
+            "move 100% 16, opacity 0.9, match:initial_title = Hyprland Polkit Agent"
           ];
           layerrule = [
           ];
