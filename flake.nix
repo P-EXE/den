@@ -19,6 +19,10 @@
       url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
     import-tree.url = "github:vic/import-tree";
     niri = {
       url = "github:sodiboo/niri-flake";

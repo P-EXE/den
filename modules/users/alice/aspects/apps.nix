@@ -14,10 +14,12 @@
         qbittorrent
 
         spotify
+        mpv
         obsidian
         steam
         #ungoogled-chromium
         #google-chrome
+
       ];
     };
   };
