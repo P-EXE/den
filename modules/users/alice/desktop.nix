@@ -22,12 +22,32 @@
         xwayland.enable = true;
       };
       nix.settings = {
-        #substituters = ["https://hyprland.cachix.org"];
-        #trusted-substituters = ["https://hyprland.cachix.org"];
-        #trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+        substituters = ["https://hyprland.cachix.org"];
+        trusted-substituters = ["https://hyprland.cachix.org"];
+        trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
       };
     };
-    homeManager = { config, pkgs, ...}: {
+    homeManager = { config, pkgs, host, ...}: let
+      hwInfo = host.hwInfo;
+      keyboardLayouts = lib.concatStrings (map (k: "${k.layout}, ") host.hwInfo.keyboards);
+      monitors = map (m: "${m.name}, ${toString m.resolution.x}x${toString m.resolution.y}@${toString m.refreshRate}, ${toString m.offset.x}x${toString m.offset.y}, ${toString m.scale}, bitdepth, 8, cm, auto, sdrbrightness, 1, sdrsaturation, 1") host.hwInfo.displays; 
+      rotation = if (hwInfo.primaryDisplay.resolution.x / hwInfo.primaryDisplay.resolution.y < 1.7777) then #1.7777 coresponds to 16:9
+        0 
+      else
+        90;
+      edge = if (hwInfo.primaryDisplay.resolution.x / hwInfo.primaryDisplay.resolution.y < 1.7777) then
+        "top"
+      else
+        "left";
+      pad = if (hwInfo.primaryDisplay.resolution.x / hwInfo.primaryDisplay.resolution.y < 1.7777) then
+        "0 ${toString (4 * hwInfo.primaryDisplay.pseudoScale)}px"
+      else
+        "${toString (4 * hwInfo.primaryDisplay.pseudoScale)}px 0";
+      side-padding = if rotation == 0 then
+        "4px ${(toString hwInfo.primaryDisplay.safezones.top-right.x)}px 4px ${(toString hwInfo.primaryDisplay.safezones.top-left.x)}px"
+      else
+        "${(toString hwInfo.primaryDisplay.safezones.top-right.x)}px 4px ${(toString hwInfo.primaryDisplay.safezones.top-left.x)}px 4px";
+    in {
       home.packages = with pkgs; [
         hyprshot
         jetbrains-mono
@@ -48,7 +68,7 @@
           "$mod" = "Super";
           "$mod_l" = "Super_L";
           input = {
-            kb_layout = "us, de";
+            kb_layout = "de, " + keyboardLayouts;
             kb_options = "grp:alt_space_toggle";
             repeat_rate = 25;
             repeat_delay = 300;
@@ -140,20 +160,21 @@
 
           # Workspaces
           workspace = [
-            "1, default:true"
-            "2"
-            "3"
-            "4"
-            "5"
-            "6"
-            "7"
-            "8"
-            "9"
+            "1, monitor:${hwInfo.primaryDisplay.name} default:true"
+            "2, monitor:${hwInfo.primaryDisplay.name}"
+            "3, monitor:${hwInfo.primaryDisplay.name}"
+            "4, monitor:${hwInfo.primaryDisplay.name}"
+            "5, monitor:${hwInfo.primaryDisplay.name}"
+            "6, monitor:${hwInfo.primaryDisplay.name}"
+            "7, monitor:${hwInfo.primaryDisplay.name}"
+            "8, monitor:${hwInfo.primaryDisplay.name}"
+            "9, monitor:${hwInfo.primaryDisplay.name}"
             "10"
           ];
 
           # Hardware
-          monitor  = [ ", preferred, auto, 1" ];
+          monitor = monitors;
+          #wayland.windowManager.hyprland.settings.monitor  = [ ", preferred, auto, 1" ];
 
           # Theme
           general = {
@@ -218,7 +239,7 @@
             enabled = true;
             bar_height = 18;
             bar_title_enabled = true;
-            bar_text_size = 8;
+            bar_text_size = builtins.floor (10 * hwInfo.primaryDisplay.pseudoScale);
             bar_text_font = "JetBrains Mono";
             bar_text_align = "left";
             bar_padding = 4;
@@ -273,7 +294,7 @@
         settings = {
           mainBar = {
             layer = "bottom";
-            position = "top";
+            position = edge;
             modules-left = [ "hyprland/workspaces" "wlr/taskbar" ];
             modules-center = [ "custom/waybar-mpris" ];
             modules-right = [ "tray" "hyprland/language" "network" "cpu" "memory" "wireplumber" "battery" "clock" ];
@@ -281,22 +302,22 @@
             "hyprland/workspaces" = {};
             "wlr/taskbar" = {
               format = "{icon}";
-              icon-size = 10;
+              icon-size = 10 * hwInfo.primaryDisplay.pseudoScale;
               tooltip-format = "{title}";
               on-click = "activate";
               on-click-middle = "close";
-              rotate = 0;
+              rotate = rotation;
             };
             "tray" = {
-              icon-size = 10;
-              spacing = 8;
-              rotate = 0;
+              icon-size = 10 * hwInfo.primaryDisplay.pseudoScale;
+              spacing = 8 * hwInfo.primaryDisplay.pseudoScale;
+              rotate = rotation;
             };
             "hyprland/language" = {
               format = "{}";
               format-de = "DE";
               format-en = "US";
-              rotate = 0;
+              rotate = rotation;
             };
             "network" = {
               format-ethernet = "ETH: {ipaddr}/{cidr}";
@@ -305,22 +326,22 @@
               format-icons = ["░" "▂" "▄" "▆" "█"];
               tooltip-format = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}";
               tooltip-format-wifi = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}\nstr: {signalStrength}\nstr dB: {signaldBm}\nfreq: {frequency} GHz\nup: {bandwidthUpBits}\ndown: {bandwidthDownBits}";
-              rotate = 0;
+              rotate = rotation;
             };
             "cpu" = {
               format = "CPU: {usage}%";
-              rotate = 0;
+              rotate = rotation;
             };
             "memory" = {
               format = "RAM: {}%";
-              rotate = 0;
+              rotate = rotation;
             };
             "wireplumber" = {
               format = "Vol: {volume}%-{node_name}";
               format-muted = "Mute";
               on-click = "helvum";
               format-icons = ["◂" "◄" "◀"];
-              rotate = 0;
+              rotate = rotation;
             };
             "pulseaudio" = {
               scroll-step = 1;
@@ -340,7 +361,7 @@
                 "default" = ["" " " " "];
               };
               on-click = "pavucontrol";
-              rotate = 0;
+              rotate = rotation;
             };
             "battery" = {
               "states" = {
@@ -354,11 +375,11 @@
               format-alt = "{icon} {time}";
               format-full = "";
               format-icons = ["░" "▂" "▄" "▆" "█"];
-              rotate = 0;
+              rotate = rotation;
             };
             "clock" = {
               format = "{:L%A %d.%m.%Y(W%V) %H:%M:%S (%z)}";
-              rotate = 0;
+              rotate = rotation;
             };
             "custom/waybar-mpris" = {
               "return-type"= "json";
@@ -373,7 +394,7 @@
               #"on-scroll-up" = "waybar-mpris --send next";
               #"on-scroll-down" = "waybar-mpris --send prev";
               "escape" = true;
-              rotate = 0;
+              rotate = rotation;
             };
           };
         };
@@ -382,13 +403,13 @@
             all: unset;
             font-family: 'JetBrains Mono';
           }
-
+      
           window#waybar>box {
             background: #000000;
-            font-size: 10px;
-            padding: 0px;
+            font-size: ${toString(10 * hwInfo.primaryDisplay.pseudoScale)}px;
+            padding: ${side-padding};
           }
-
+      
           tooltip {
             background: transparent;
             /* border: 1px solid rgba(100, 114, 125, 0.5); */
@@ -397,51 +418,51 @@
             background: #000000;
             margin: 4px;
           }
-
+      
           #workspaces {
           }
           #workspaces button {
-            padding: 0px;
+            padding: ${pad};
             color: rgba(255, 255, 255, 0.5);
           }
           #workspaces button.active {
             color: #ffffff;
           }
           #taskbar {
-            padding: 0px;
+            padding: ${pad};
           }
           #taskbar * {
             padding: 1px;
           }
-
+      
           #tray {
-            padding: 0px;
+            padding: ${pad};
           }
           #language {
-            padding: 0px;
+            padding: ${pad};
           }
           #network {
-            padding: 0px;
+            padding: ${pad};
             color: #ff6188;
           }
           #cpu {
-            padding: 0px;
+            padding: ${pad};
             color: #fc9867;
           }
           #memory {
-            padding: 0px;
+            padding: ${pad};
             color: #ffd866;
           }
           #wireplumber {
-            padding: 0px;
+            padding: ${pad};
             color: #a9dc76;
           }
           #battery {
-            padding: 0px;
+            padding: ${pad};
             color: #78dce8;
           }
           #clock {
-            padding: 0px;
+            padding: ${pad};
             color: #ab9df2;
           }
         '';
@@ -462,13 +483,30 @@
           font = "JetBrains Mono";
           font-variations = "wght 900";
           font-features = "ss08 on";
-          font-size = "96px";
+          font-size = "${toString (96 * hwInfo.primaryDisplay.pseudoScale)}px";
           text-color = "#FFFFFF33";
           background-color = "#000000FF";
           selection-color = "#FFFFFFE6";
           selection-match-color = "#FF4F00";
           selection-background-padding = "16px 0 16px 16px";
           prompt-text = "↘";
+        };
+      };
+
+      services.dunst = {
+        enable = true;
+        settings.global = {
+          monitor = 0;
+          follow  = "none";
+          width = 300;
+          height = 300;
+          offset = "30x50";
+          origin = "top-right";
+          #transparency = 10;
+          #frame_color = "#eceff1";
+          background = "#000000";
+          frame_width = 0;
+          font = "JetBrains Mono 9";
         };
       };
 

@@ -1,9 +1,7 @@
 { den, inputs, lib, ... }: {
   den.aspects.alice._.apps = {
-    #includes = lib.attrValues den.aspects.alice._.apps._;
+    includes = lib.attrValues den.aspects.alice._.apps._;
     homeManager = {pkgs, config, ...}: {
-      programs.firefox.enable = true;
-      programs.firefox.configPath = "${config.xdg.configHome}/mozilla/firefox";
       home.packages = with pkgs; [
         htop
         btop
@@ -17,10 +15,12 @@
         mpv
         obsidian
         steam
-        #ungoogled-chromium
+        ungoogled-chromium
         #google-chrome
 
       ];
+      programs.firefox.enable = true;
+      programs.firefox.configPath = "${config.xdg.configHome}/mozilla/firefox";
     };
   };
 }

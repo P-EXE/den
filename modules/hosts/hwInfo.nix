@@ -96,7 +96,7 @@ keyboard = lib.types.submodule ({...}: with lib; {
   };
 });
 in {
-  den.schema.host = {
+  den.schema.host = {host, ...}: {
     options.hwInfo = with lib; {    
       deviceType = mkOption {
         type = types.enum [ "laptop" "desktop" "server" ];
@@ -116,7 +116,7 @@ in {
 
       primaryDisplay = mkOption {
         type = display;
-        default = lib.head cfg.displays;
+        default = lib.head host.hwInfo.displays;
       };
     };
   };
