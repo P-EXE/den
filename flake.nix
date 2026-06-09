@@ -5,6 +5,10 @@
 
   inputs = {
     blender-cuda.url = "github:adithyagenie/blender-cuda-nixos";
+    bunny-yazi = {
+      url = "github:stelcodes/bunny.yazi";
+      flake = false;
+    };
     den.url = "github:vic/den";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
@@ -30,5 +34,6 @@
     };
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    yazi.url = "github:sxyazi/yazi";
   };
 }

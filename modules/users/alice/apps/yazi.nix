@@ -10,6 +10,9 @@
   };
   den.aspects.alice._.apps._.yazi = {
     homeManager = { pkgs, ...}: {
+      home.packages = with pkgs;[
+        yaziPlugins.ouch
+      ];
       programs.yazi = {
         enable = true;
         package = inputs.yazi.packages.${pkgs.stdenv.hostPlatform.system}.default;
@@ -32,6 +35,7 @@
         ];
         plugins = { 
           bunny = "${inputs.bunny-yazi}";
+          ouch = "${pkgs.yaziPlugins.ouch}";
         };
         initLua = ''
           require("bunny"):setup({

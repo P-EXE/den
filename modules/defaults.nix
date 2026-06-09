@@ -2,8 +2,11 @@
   den.default.nixos = {
     nixpkgs.config.allowUnfree = true;
     nix.settings = {
-      trusted-users = [ "@wheel" ];
+      trusted-users = [ "@wheel" "alice" ];
       experimental-features = [ "nix-command" "flakes" ];
+      builders-use-substitutes = true;
+      extra-substituters = [];
+      extra-trusted-public-keys = [];
     };
 
     programs.nix-ld.enable = true;

@@ -8,6 +8,7 @@
         bottom
         cbonsai
         fastfetch
+        ouch
 
         qbittorrent
 
@@ -17,10 +18,19 @@
         steam
         ungoogled-chromium
         #google-chrome
-
       ];
       programs.firefox.enable = true;
       programs.firefox.configPath = "${config.xdg.configHome}/mozilla/firefox";
+
+      services.udiskie = {
+        enable = true;
+        automount = true;
+        tray = "auto";
+        notify = false;
+        settings = {
+          mount_path = "~/Desktop";
+        };
+      };
     };
   };
 }

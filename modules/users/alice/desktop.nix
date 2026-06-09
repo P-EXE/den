@@ -48,9 +48,23 @@
       else
         "${(toString hwInfo.primaryDisplay.safezones.top-right.x)}px 4px ${(toString hwInfo.primaryDisplay.safezones.top-left.x)}px 4px";
     in {
+
+      nix.settings = {
+        substituters = ["https://hyprland.cachix.org"];
+        trusted-substituters = ["https://hyprland.cachix.org"];
+        trusted-public-keys = ["hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
+      };
+
       home.packages = with pkgs; [
         hyprshot
         jetbrains-mono
+        #nerd-fonts.jetbrains-mono
+
+        impala
+        bluetuith
+        waybar-mpris
+
+        wpaperd
       ];
       
       wayland.windowManager.hyprland = {
@@ -86,7 +100,7 @@
             "$mod, K, exec, kitty"
             "$mod, E, exec, kitty yazi"
             #"$mod, Tab, hyprexpo:expo, toggle"
-            "Control_L&Shift_L, Escape, exec, kitty htop"
+            "Control_L&Shift_L, Escape, exec, kitty btop"
             "$mod, Print, exec, hyprshot -m region --clipboard-only"
             "$mod+Shift, Print, exec, hyprshot -m output --clipboard-only"
             "$mod+Shift+Control, Print, exec, hyprshot -m window --clipboard-only"
@@ -155,6 +169,8 @@
             "udiskie"
             "waybar"
             "systemctl --user enable --now hyprpaper.service"
+            "blueman-applet"
+            "wpaperd -d"
             #"awww-daemon"
           ];
 
@@ -297,7 +313,7 @@
             position = edge;
             modules-left = [ "hyprland/workspaces" "wlr/taskbar" ];
             modules-center = [ "custom/waybar-mpris" ];
-            modules-right = [ "tray" "hyprland/language" "network" "cpu" "memory" "wireplumber" "battery" "clock" ];
+            modules-right = [ "tray" "hyprland/language" "bluetooth" "network" "cpu" "memory" "wireplumber#source" "wireplumber#sink" "battery" "clock" ];
             #output = [];
             "hyprland/workspaces" = {};
             "wlr/taskbar" = {
@@ -319,29 +335,59 @@
               format-en = "US";
               rotate = rotation;
             };
+            "bluetooth" = {
+              #"controller" = "controller1";
+              format-on = "BLTH: On";
+              format-off = "BLTH: Off";
+              format-disabled = "BLTH: Dis";
+              format-connected = "BLTH: {num_connections}";
+              tooltip-format = "{controller_alias}\t{controller_address}";
+              tooltip-format-connected = "{controller_alias}\t{controller_address}\n\n{device_enumerate}";
+              #"tooltip-format-connected" = "{device_enumerate}";
+              tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+              on-click = "hyprctl dispatch -- exec kitty -e bluetuith";
+            };
             "network" = {
               format-ethernet = "ETH: {ipaddr}/{cidr}";
-              format-wifi = "WLAN: {essid}-↑{bandwidthUpBits}↓{bandwidthDownBits}";
-              format-disconnected = "";
+              format-wifi = "WLAN: {essid} {icon}";
+              format-disconnected = "NO NETWORK";
               format-icons = ["░" "▂" "▄" "▆" "█"];
               tooltip-format = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}";
               tooltip-format-wifi = "if: {ifname}\nip: {ipaddr}/{cidr}/{cidr6}\ngw: {gwaddr}\nstr: {signalStrength}\nstr dB: {signaldBm}\nfreq: {frequency} GHz\nup: {bandwidthUpBits}\ndown: {bandwidthDownBits}";
+              on-click = "hyprctl dispatch -- exec kitty -e impala";
               rotate = rotation;
             };
             "cpu" = {
               format = "CPU: {usage}%";
+              on-click = "hyprctl dispatch -- exec kitty -e btop";
               rotate = rotation;
             };
             "memory" = {
               format = "RAM: {}%";
+              on-click = "hyprctl dispatch -- exec kitty -e btop";
               rotate = rotation;
             };
-            "wireplumber" = {
-              format = "Vol: {volume}%-{node_name}";
-              format-muted = "Mute";
-              on-click = "helvum";
-              format-icons = ["◂" "◄" "◀"];
-              rotate = rotation;
+            #"wireplumber" = {
+            # format = "SPKR: {volume}%-{node_name}";
+            #  format-muted = "SPKR: Muted-{node_name}";
+            #  on-click = "";
+            #  format-icons = ["◂" "◄" "◀"];
+            #  rotate = rotation;
+            #};
+            "wireplumber#sink" = {
+              format = "OUT: {volume}%";
+              format-muted = "OUT: MUTE";
+              format-icons = ["" "" ""];
+              on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+              on-click-right = "helvum";
+              scroll-step = 5;
+            };
+            "wireplumber#source" = {
+              node-type = "Audio/Source";
+              format = "IN: {volume}%";
+              format-muted = "IN: MUTE";
+              on-click = "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+              scroll-step = 5;
             };
             "pulseaudio" = {
               scroll-step = 1;
@@ -370,8 +416,8 @@
                 "critical" = 15;
               };
               format = "BAT: {capacity}%";
-              format-charging = "CRG-{capacity}%";
-              format-plugged = "PLG-{capacity}%";
+              format-charging = "BAT: CRG-{capacity}%";
+              format-plugged = "BAT: PLG-{capacity}%";
               format-alt = "{icon} {time}";
               format-full = "";
               format-icons = ["░" "▂" "▄" "▆" "█"];
@@ -441,6 +487,10 @@
           #language {
             padding: ${pad};
           }
+          #bluetooth {
+            padding: ${pad};
+            color: #fc9867;
+          }
           #network {
             padding: ${pad};
             color: #ff6188;
@@ -480,9 +530,9 @@
           padding-top = 16;
           result-spacing = -16;
           num-results = 0;
-          font = "JetBrains Mono";
-          font-variations = "wght 900";
-          font-features = "ss08 on";
+          font = "Helvetica Neue Bold";
+          #font-variations = "wght 900";
+          #font-features = "ss08 on";
           font-size = "${toString (96 * hwInfo.primaryDisplay.pseudoScale)}px";
           text-color = "#FFFFFF33";
           background-color = "#000000FF";
@@ -511,6 +561,18 @@
       };
 
       # Theme
+      services.wpaperd = {
+        enable = true;
+        settings = {
+          eDP-1 = {
+            duration = "30m";
+            mode = "center";
+            sorting = "ascending";
+            path = "/home/alice/Pictures/Wallpapers/Clay Banks/Arizona";
+          };
+        };
+      };
+
       home.pointerCursor = {
         gtk.enable = true;
         package = pkgs.bibata-cursors;

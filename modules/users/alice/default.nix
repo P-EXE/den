@@ -10,18 +10,20 @@
       den.aspects.alice._.coding
     ];
     homeManager = { pkgs, ... }: {
-      home.packages = with pkgs; [ 
-        htop
-      ];
+      home.packages = with pkgs; [];
     };
-    nixos = {
+    nixos = { pkgs, ... }: {
       users.users.alice.extraGroups = [
         "sambagroup"
+      ];
+      fonts.packages = with pkgs; [
+        #nerd-fonts.jetbrains-mono
+        jetbrains-mono
       ];
     };
     # user can provide NixOS configurations
     # to any host it is included on
-    provides.to-hosts.nixos = { pkgs, ... }: { 
+    provides.to-hosts.nixos = { pkgs, ... }: {
     };
     # Aspects
     _.themes._.archive = {

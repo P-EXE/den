@@ -16,9 +16,12 @@
         services.xserver.displayManager.gdm.enable = true;
         services.xserver.desktopManager.gnome.enable = true;
 
-      environment.systemPackages = [ pkgs.hello ];
+      environment.systemPackages = with pkgs; [
+        udiskie
+        brightnessctl
+      ];
 
-      # Network
+      # Network & Wireless
         networking = {
           hostName = "Framework13";
           firewall = {
@@ -26,9 +29,14 @@
             allowedTCPPorts = [ ];
             allowedUDPPorts = [ ];
           };
-          networkmanager.enable = true;
+          networkmanager.enable = false;
+          wireless = {
+            iwd.enable = true;
+          };
         };
         services.printing.enable = true;
+        hardware.bluetooth.enable = true;
+        services.blueman.enable = true;
 
       # Locale
         services.xserver.xkb = {
@@ -62,6 +70,12 @@
           system.stateVersion = "26.05";
 
       # Hardware
+        # Biometrics
+          services.fprintd.enable = true;
+          #systemd.services.fprintd = {
+          #  wantedBy = [ "multi-user.target" ];
+          #  serviceConfig.Type = "simple";
+          #};
         # Audio
           services.pulseaudio.enable = false;
           security.rtkit.enable = true;
@@ -78,6 +92,8 @@
         # CPU
           hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
         # Disks
+          services.gvfs.enable = true;
+          services.udisks2.enable = true;
           fileSystems = {
             "/" = {
               device = "/dev/disk/by-uuid/bccc2480-9a73-4378-a311-335d840e4462";
