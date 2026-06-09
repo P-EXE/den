@@ -95,18 +95,22 @@
           services.gvfs.enable = true;
           services.udisks2.enable = true;
           fileSystems = {
-            "/" = {
-              device = "/dev/disk/by-uuid/bccc2480-9a73-4378-a311-335d840e4462";
+            "/" = { 
+              device = "/dev/disk/by-uuid/72e459ad-ebf3-41ab-aaac-6a8ec243b4dc";
               fsType = "btrfs";
-              options = [ "subvol=@" ];
             };
             "/home" = { 
-              device = "/dev/disk/by-uuid/bccc2480-9a73-4378-a311-335d840e4462";
+              device = "/dev/disk/by-uuid/72e459ad-ebf3-41ab-aaac-6a8ec243b4dc";
               fsType = "btrfs";
-              options = [ "subvol=@home" ];
+              options = [ "subvol=home" ];
+            };
+            "/nix" = { 
+              device = "/dev/disk/by-uuid/72e459ad-ebf3-41ab-aaac-6a8ec243b4dc";
+              fsType = "btrfs";
+              options = [ "subvol=nix" ];
             };
             "/boot" = { 
-              device = "/dev/disk/by-uuid/378C-6CC7";
+              device = "/dev/disk/by-uuid/1FB6-02DC";
               fsType = "vfat";
               options = [ "fmask=0077" "dmask=0077" ];
             };
